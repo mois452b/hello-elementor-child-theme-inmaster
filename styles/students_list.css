@@ -1,0 +1,35 @@
+#shortcode_students_list .students_list table {
+    width: 75%;
+    margin: auto;
+}
+
+#shortcode_students_list .students_list table td {
+    text-align: center;
+}
+
+#shortcode_students_list .students_list table input[type="checkbox"] {
+    display: none;
+}
+
+#shortcode_students_list .students_list table div {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 50%;
+    text-align: center;
+	cursor: pointer;
+	background: red;
+    margin: auto;
+    padding: 5px
+}
+
+#shortcode_students_list .students_list table div.present {
+    background-color: rgb( 100, 255, 100 );
+}
+
+#shortcode_students_list .students_list table .student-name {
+    font-size: 20px;
+    margin-left: 10px;
+}
