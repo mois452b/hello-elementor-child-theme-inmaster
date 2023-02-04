@@ -20,7 +20,7 @@ function render_select_course( $courses ) {
                 </select>	
             </div>
             
-            <input class="send" type="submit" value="Confirmar" />
+            <input class="send button" type="submit" value="Confirmar" />
         </form>
     </div>
 <?php

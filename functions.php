@@ -26,7 +26,11 @@ if ( !function_exists( 'child_theme_configurator_css' ) ):
         wp_localize_script( 'shortcode_students_list_script', 'ajax_var', array(
             'url'    => admin_url( 'admin-ajax.php' ),
             'nonce'  => wp_create_nonce( 'my-ajax-nonce' ),
-            'action' => 'enroll_students'
+            'actions' => array(
+                'enroll' => 'enroll_students',
+                'get_course_students' => 'get_course_students'
+                
+            )
         ) );
     }
 endif;
@@ -60,5 +64,17 @@ add_action( 'wp_head', 'head' );
 
 add_action( 'wp_ajax_enroll_students', 'enroll_students' );
 add_action( 'wp_ajax_nopriv_enroll_students', 'enroll_students' );
+
+function events_endpoint() {
+    register_rest_route( 'v1/', 'get_course_students/', array(
+        'methods'  => 'get',
+        'callback' => 'get_course_students',
+    ) );
+}
+add_action( 'rest_api_init', 'events_endpoint' );
+
+
+add_action( 'wp_ajax_get_course_students', 'get_course_students' );
+add_action( 'wp_ajax_nopriv_get_course_students', 'get_course_students' );
 
 // END ENQUEUE PARENT ACTION

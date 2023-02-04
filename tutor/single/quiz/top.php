@@ -33,10 +33,11 @@ $passing_grade     = tutor_utils()->get_quiz_option( get_the_ID(), 'passing_grad
 $attempt_remaining = (int) $attempts_allowed - (int) $attempted_count;
 
 do_action( 'tutor_quiz/single/before/top' );
+$user_meta = get_user_meta( get_current_user_id() );
 $is_locked = false;
 if( post_has_taxonomy_slug( $course_id, 'course-category', 'talleres-presenciales' ) && $post->post_type == 'tutor_quiz' ) {
 	if( !isset( $user_meta['enable_final_quiz']) || !in_array( $course_id, json_decode( $user_meta['enable_final_quiz'][0] ) ) ) {
-		$is_locked = false;
+		$is_locked = true;
 	}
 }
 ?>

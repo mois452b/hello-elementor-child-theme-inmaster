@@ -24,8 +24,7 @@ if ( !function_exists( 'list_students' ) ) {
             <?php
                 if( isset( $_POST['id_course_students_list'] ) && $_POST['id_course_students_list']!='' ) {
 					wp_enqueue_style('shortcode_students_list_style', get_stylesheet_directory_uri() . '/styles/students_list.css');
-                    $students = tutor_utils( )->get_students( 0, 1000, '', $_POST['id_course_students_list'] );
-                    render_students_list( $students, $_POST['id_course_students_list'] );
+                    render_students_list( $_POST['id_course_students_list'] );
 					wp_enqueue_script( 'shortcode_students_list_script' );
 
                 }
