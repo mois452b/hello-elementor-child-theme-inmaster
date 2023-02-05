@@ -12,7 +12,8 @@ function render_students_list( $course_id ) {
         $present = in_array( $course_id, $user_data );
         $class = $present ? 'present' : '';
         $checked = $present ? 'checked' : '';
-        $datas[] = [ $student->ID, $student->display_name, "<div class='$class' data-value='$student->ID' >P</div>
+        $txt = $present ? 'P' : 'A';
+        $datas[] = [ $student->ID, $student->display_name, "<div class='$class' data-value='$student->ID' >$txt</div>
                                                         <input  type='checkbox' 
                                                                 name='presented_students[]' 
                                                                 class='checkbox-$student->ID' 
@@ -30,24 +31,6 @@ function render_students_list( $course_id ) {
                     </tr>
                 </thead>
                 <tbody>
-            <?php
-                // foreach ( $students as $student ) {
-                //     $user_meta = get_user_meta( $student->ID );
-                //     $user_data = [];
-                //     if( isset( $user_meta['enable_final_quiz'] ) ) {
-                //         $user_data = json_decode( $user_meta['enable_final_quiz'][0] );
-                //     }
-                //     $present = in_array( $course_id, $user_data );
-                //     $class = $present ? 'present' : '';
-                //     $checked = $present ? 'checked' : '';
-                //     // Añadir una fila para cada estudiante.
-                //     echo '<tr>';
-                //     echo 	'<td><span class="student-name">' . $student->display_name . '</span></td>';
-                //     echo 	"<td><div class='$class' data-value='$student->ID' >P</div>";
-                //     echo 		"<input type='checkbox' name='presented_students[]' class='checkbox-$student->ID' value='$student->ID' $checked ></td>";
-                //     echo '</tr>';
-                // }
-            ?>
                 </tbody>
             </table>
             <input class="course-id" type="hidden" value="<?= $course_id ?>" >
