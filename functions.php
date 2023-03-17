@@ -35,9 +35,19 @@ if ( !function_exists( 'child_theme_configurator_css' ) ):
     }
 endif;
 
+function tutor_child_before_add_to_cart( ) {
+    if( post_has_taxonomy_slug( get_the_ID( ), 'course-category', 'talleres-presenciales' ) ) {
+    ?>
+        <div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>">
+            <input type="radio" name="deposit-mode" value="check_deposit" checked >
+        </div>
+    <?php
+    }
+}
 
 if ( !function_exists( 'shortCodes_init' ) ) {
     function shortCodes_init( ) {
+        add_action( 'tutor_child_before_add_to_cart', 'tutor_child_before_add_to_cart' );
         add_shortcode( 'list_students', 'list_students' );
     }
 };
@@ -71,7 +81,6 @@ function events_endpoint() {
         'callback' => 'get_course_students',
     ) );
 }
-add_action( 'rest_api_init', 'events_endpoint' );
 
 
 add_action( 'wp_ajax_get_course_students', 'get_course_students' );

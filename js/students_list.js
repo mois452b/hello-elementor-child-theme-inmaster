@@ -3,7 +3,6 @@ function update_student_status( ) {
     elements.forEach( element => {
         element.onclick = event => {
             let target = event.target
-            console.log(target)
             let checkbox = document.querySelector('#shortcode_students_list div.students_list tr input.checkbox-'+target.dataset.value)
             target.classList.toggle('present')
             if( target.classList.contains('present') ) {
