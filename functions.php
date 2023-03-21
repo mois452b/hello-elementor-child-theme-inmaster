@@ -37,17 +37,29 @@ endif;
 
 function tutor_child_before_add_to_cart( ) {
     if( post_has_taxonomy_slug( get_the_ID( ), 'course-category', 'talleres-presenciales' ) ) {
-    ?>
-        <div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>">
-            <input type="radio" name="deposit-mode" value="check_deposit" checked >
-        </div>
+		$deposit_text = __( 'Deposit : 50% now - 50% after', 'tutor' );
+	?>
+		<div class="" >
+			<p class=""><?php echo $deposit_text; ?></p>
+			<div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>" hidden >
+				<input type="radio" name="deposit-mode" value="check_deposit" checked >
+			</div>
+		</div>
     <?php
     }
+}
+
+function change_status_to_completed( $status ) {
+    if( $status == 'wc-deposit') {
+        return 'wc-completed';
+    }
+    return $status;
 }
 
 if ( !function_exists( 'shortCodes_init' ) ) {
     function shortCodes_init( ) {
         add_action( 'tutor_child_before_add_to_cart', 'tutor_child_before_add_to_cart' );
+		add_filter( 'woocommerce_payment_complete_order_status', 'change_status_to_completed', 15 );
         add_shortcode( 'list_students', 'list_students' );
     }
 };
