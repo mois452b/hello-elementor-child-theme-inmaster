@@ -56,9 +56,49 @@ function change_status_to_completed( $status ) {
     return $status;
 }
 
+function show_students_in_course( ) {
+    global $post;
+    $course_id = $post->ID;
+	$total_enrolled   = (int) tutor_utils()->count_enrolled_users_by_course( $course_id );
+	$maximum_students = (int) tutor_utils()->get_course_settings( $course_id, 'maximum_students' );
+    if( $maximum_students )
+        echo "<div class='tutor-fs-7 tutor-fw-medium tutor-color-black tutor-ml-8 tutor-mt-8' >
+        $total_enrolled estudiantes inscritos de $maximum_students
+        </div>";
+}
+
+function change_metadata_value_in_percent( $datas ) {
+    global $post;
+    $datas_map = array_map( function( $data ) use ( $post ) {
+        if( !$data['value'] ) return $data;
+        if( $data['icon_class'] != 'tutor-icon-mortarboard' ) return $data;
+        $course_id = $post->ID;
+        $total_enrolled   = (int) tutor_utils()->count_enrolled_users_by_course( $course_id );
+        $maximum_students = (int) tutor_utils()->get_course_settings( $course_id, 'maximum_students' );
+
+        $total_booked     = 100 / $maximum_students * $total_enrolled;
+		$b_total          = ceil( $total_booked );
+
+        $data['value'] = '<div class="tutor-course-booking-progress tutor-d-flex tutor-align-center">
+                            <div class="tutor-mr-8">
+                                <div class="tutor-progress-circle" style="--pro: ' . esc_html( $b_total ) . '%;" area-hidden="true"></div>
+                            </div>
+                            <div class="tutor-fs-7 tutor-fw-medium">' .
+                            esc_html( $b_total ) . __( '% Total Enrolled', 'tutor' ) . '
+                            </div>
+                        </div>';
+
+        return $data;
+    }, $datas );
+    return $datas_map;
+}
+
 if ( !function_exists( 'shortCodes_init' ) ) {
     function shortCodes_init( ) {
         add_action( 'tutor_child_before_add_to_cart', 'tutor_child_before_add_to_cart' );
+        // add_action( 'tutor_child_before_add_to_cart', 'show_students_in_course' );
+        // add_action( 'tutor_course/loop/after_meta', 'show_students_in_course' );
+		add_filter( 'tutor/course/single/sidebar/metadata', 'change_metadata_value_in_percent' );
 		add_filter( 'woocommerce_payment_complete_order_status', 'change_status_to_completed', 15 );
         add_shortcode( 'list_students', 'list_students' );
     }
