@@ -39,12 +39,34 @@ function tutor_child_before_add_to_cart( ) {
     if( post_has_taxonomy_slug( get_the_ID( ), 'course-category', 'talleres-presenciales' ) ) {
 		$deposit_text = __( 'Deposit : 50% now - 50% after', 'tutor' );
 	?>
-		<div class="" >
-			<p class=""><?php echo $deposit_text; ?></p>
-			<div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>" hidden >
-				<input type="radio" name="deposit-mode" value="check_deposit" checked >
-			</div>
-		</div>
+		<div class="deposits-frontend-wrapper">
+            <p class="deposit-notice"><?php echo $deposit_text; ?></p>
+            <div class="deposits-input-wrapper">
+                <div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>">
+                <input type="radio" name="deposit-mode" value="check_full" >
+                <div class="state p-primary-o">
+                    <?php if ( cidw_get_option( 'cidw_radio_theme' ) == 'p-image p-plain' ) {
+				echo '<img class="image" src="' . cidw_get_option( 'cidw_radio_theme_image' ) . '">';
+			}?>
+
+                        <label><?php echo esc_html( cidw_get_option( 'txt_full_payment', 'Full Payment' ) ); ?></label>
+                    </div>
+                </div>
+
+                <div class="pretty <?php echo esc_attr( cidw_get_option( 'cidw_radio_theme' ) ); ?>">
+                    <input type="radio" name="deposit-mode" value="check_deposit" <?php echo ( $deposit_value || isset( $_POST['deposit-mode'] ) && $_POST['deposit-mode'] == 'check_deposit' || !isset( $_POST['deposit-mode'] ) ) ? 'checked' : '' ?>>
+                    <div class="state p-primary-o">
+                        <?php if ( cidw_get_option( 'cidw_radio_theme' ) == 'p-image p-plain' ) {
+				echo '<img class="image" src="' . cidw_get_option( 'cidw_radio_theme_image' ) . '">';
+			}?>
+
+                        <label><?php echo esc_html( cidw_get_option( 'txt_pay_deposit', 'Pay Deposit' ) ); ?></label>
+                    </div>
+                </div>
+            </div>
+
+            <span style="margin-bottom:15px;display: block;"></span>
+        </div>
     <?php
     }
 }
@@ -76,6 +98,7 @@ function change_metadata_value_in_percent( $datas ) {
         $total_enrolled   = (int) tutor_utils()->count_enrolled_users_by_course( $course_id );
         $maximum_students = (int) tutor_utils()->get_course_settings( $course_id, 'maximum_students' );
 
+        if( !$maximum_students ) return $data;
         $total_booked     = 100 / $maximum_students * $total_enrolled;
 		$b_total          = ceil( $total_booked );
 
